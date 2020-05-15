@@ -7,6 +7,9 @@
   "main": "lib/index.js",
   "module": "lib/index.es.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "/lib"
+  ],
   "scripts": {
     "analyze": "rm -rf dependency-map && source-map-explorer ./lib/ramen.min.js ./lib/ramen.min.js.map --html dependency-map/index.html",
     "coverage": "npm run test -- --coverage",
