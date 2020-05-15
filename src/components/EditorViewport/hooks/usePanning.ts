@@ -20,10 +20,19 @@ function usePanning(canPan: boolean, viewport: any): null {
       e.stopPropagation();
       dispatch(startPanning(e.pageX, e.pageY));
     }
-
-    // pan on middle mouse button down and move
+    
+    // pan on mouse move when CTRL or middle mouse button is pressed and mouse is moved
     function onPointerMove(e: MouseEvent) {
-      if (!isPanning) return;
+      if (!isPanning && !e.ctrlKey) return;
+      if (!isPanning && e.ctrlKey) {
+        dispatch(startPanning(e.pageX, e.pageY));
+        document.body.style.cursor = "grab";
+      }
+      if (isPanning && !e.ctrlKey) {
+        dispatch(stopPanning());
+        document.body.style.cursor = "initial";
+      }
+
       e.preventDefault();
       e.stopPropagation();
       dispatch(setViewportPos(e.pageX, e.pageY));
@@ -32,12 +41,12 @@ function usePanning(canPan: boolean, viewport: any): null {
     // end pan on middle mouse button up
     function onPointerUp(e: MouseEvent) {
       if (!isPanning) return;
-      if (e.button !== 1) return;
+      //if (e.button !== 1) return;
       e.preventDefault();
       e.stopPropagation();
       dispatch(stopPanning());
     }
-
+    
     viewport.addEventListener("pointerdown", onPointerDown);
     viewport.addEventListener("pointerup", onPointerUp);
     viewport.addEventListener("pointermove", onPointerMove);
