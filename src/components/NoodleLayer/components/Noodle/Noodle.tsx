@@ -61,7 +61,7 @@ function Noodle(props: INoodleProps) {
         fill="none"
         stroke="transparent"
         strokeWidth="20"
-        style={{ cursor: "grab" }}
+        style={{ cursor: "pointer" }}
       />
     </g>
   );
