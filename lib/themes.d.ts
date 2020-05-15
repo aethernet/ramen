@@ -1,0 +1,35 @@
+declare const lightTheme: {
+    fontName: string;
+    fontSize: string;
+    borderRadius: string;
+    borderWidth: string;
+    textColor: string;
+    textSecondary: string;
+    borderColor: string;
+    editorBackground: string;
+    editorBackgroundMuted: string;
+    nodeBackground: string;
+    nodeBackgroundSelected: string;
+    nodeBorderSelected: string;
+    pinBorder: string;
+    noodleColor: string;
+    inputBackground: string;
+};
+declare const darkTheme: {
+    fontName: string;
+    fontSize: string;
+    borderRadius: string;
+    borderWidth: string;
+    textColor: string;
+    textSecondary: string;
+    borderColor: string;
+    editorBackground: string;
+    editorBackgroundMuted: string;
+    nodeBackground: string;
+    nodeBackgroundSelected: string;
+    nodeBorderSelected: string;
+    pinBorder: string;
+    noodleColor: string;
+    inputBackground: string;
+};
+export { lightTheme, darkTheme };
