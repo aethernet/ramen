@@ -32,43 +32,25 @@ function useZoomingAndPanning(canZoom: boolean, canPan: boolean, viewport: any):
       }
     }
 
-//-> FIXME: THIS FALLBACK FOR MOUSE DOESNT WORK!!!
-    // start pan on middle mouse button down
-    function onPointerDown(e: MouseEvent) {
-      if (isPanning) return
-      if (e.button !== 1) return
-      e.preventDefault()
-      e.stopPropagation()
-      dispatch(startPanning(e.pageX, e.pageY))
-    }
-
+    //FIXME: this doesnt work
     function onPointerMove(e: MouseEvent) {
-      if (!isPanning) return
+      console.log(e, isPanning)
+      if (!isPanning && !e.altKey && !e.buttons) return
+      if (!isPanning) dispatch(startPanning(e.pageX, e.pageY))
+      if (isPanning && (!e.altKey || !e.buttons)) dispatch(stopPanning())
+      if (isPanning) dispatch(setViewportPos(e.pageX, e.pageY))
+      
       e.preventDefault()
       e.stopPropagation()
-      dispatch(setViewportPos(e.pageX, e.pageY))
-    }
-
-    // end pan on middle mouse button up
-    function onPointerUp(e: MouseEvent) {
-      if (!isPanning) return
-      if (e.button !== 1) return
-      e.preventDefault()
-      e.stopPropagation()
-      dispatch(stopPanning())
     }
 
     viewport.addEventListener("wheel", onWheelScroll);
     if(canPan){
-      viewport.addEventListener("pointerdown", onPointerDown);
-      viewport.addEventListener("pointerup", onPointerUp);
       viewport.addEventListener("pointermove", onPointerMove);
     }
 
     return () => {
       viewport.removeEventListener("wheel", onWheelScroll);
-      viewport.removeEventListener("pointerdown", onPointerDown);
-      viewport.removeEventListener("pointerup", onPointerUp);
       viewport.removeEventListener("pointermove", onPointerMove);
     };
 
