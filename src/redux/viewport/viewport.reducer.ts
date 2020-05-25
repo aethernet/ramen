@@ -1,10 +1,20 @@
 import { createReducer } from "../utils";
-import { SET_VIEWPORT_POS, SET_VIEWPORT_ZOOM, START_PANNING, STOP_PANNING } from "./viewport.actions";
+import {
+  SET_VIEWPORT_POS,
+  SET_VIEWPORT_POS_DELTA, 
+  SET_VIEWPORT_ZOOM,
+  START_PANNING,
+  STOP_PANNING,
+} from "./viewport.actions"
 import { IViewportState } from "./viewport.types";
 
 const INITIAL_STATE = {
   xPos: 0,
   yPos: 0,
+  panOrigin: {
+    x: 0,
+    y: 0,
+  },
   zoom: 1,
   settings: {
     canPan: true,
@@ -40,7 +50,24 @@ function panHandler(state: IViewportState, action: any): IViewportState {
     ...state,
     xPos: x,
     yPos: y,
-  };
+  }
+}
+
+/** given an action to pan, update the viewport location if within bounds
+ * @param state
+ * @param action
+ */
+function panHandlerDelta(state: IViewportState, action: any): IViewportState {
+  const { x, y } = action.payload;
+  return {
+    ...state,
+    xPos: x,
+    yPos: y,
+    panOrigin: {
+      x: x,
+      y: y,
+    },
+  }
 }
 
 /** initialize panning
@@ -56,7 +83,7 @@ function panStartHandler(state: IViewportState, action: any): IViewportState {
       x: x - state.xPos,
       y: y - state.yPos,
     },
-  };
+  }
 }
 
 /** stop panning
@@ -74,8 +101,9 @@ function panStopHandler(state: IViewportState): IViewportState {
 const viewportReducer = createReducer(INITIAL_STATE, {
   [SET_VIEWPORT_ZOOM]: zoomHandler,
   [SET_VIEWPORT_POS]: panHandler,
+  [SET_VIEWPORT_POS_DELTA]: panHandlerDelta,
   [START_PANNING]: panStartHandler,
   [STOP_PANNING]: panStopHandler,
-});
+})
 
 export default viewportReducer;

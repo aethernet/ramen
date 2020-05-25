@@ -2,7 +2,11 @@ import get from "lodash.get";
 
 import { IRamenEvents } from "../../types";
 import { IStoreState } from "../types";
-import { SET_VIEWPORT_POS, SET_VIEWPORT_ZOOM } from "./viewport.actions";
+import {
+  SET_VIEWPORT_POS,
+  SET_VIEWPORT_ZOOM,
+  SET_VIEWPORT_POS_DELTA,
+} from "./viewport.actions"
 
 const MAX_X = 0;
 const MAX_Y = 0;
@@ -107,6 +111,47 @@ function transformPanAction(state: IStoreState, action: any) {
   };
 }
 
+/** given an delta to pan the viewport, calculate the new position for the viewport
+ * @param state
+ * @param action
+ */
+function transformPanDeltaAction(state: IStoreState, action: any) {
+  const { x, y } = action.payload
+  const { settings, panOrigin, zoom } = get(state, "viewport")
+  const { viewportId, editorId } = get(state, "references")
+
+  const delta = [panOrigin.x - x, panOrigin.y - y]
+
+  let newXPos = delta[0]
+  let newYPos = delta[1]
+
+  const editor = document.getElementById(editorId)
+  const viewport = document.getElementById(viewportId)
+
+  const minX = -editor.offsetWidth + get(settings, "padding", 0)
+  const minY = -editor.offsetHeight + get(settings, "padding", 0)
+
+  const minXBoundary = -Math.abs(minX * zoom + viewport.offsetWidth)
+  const minYBoundary = -Math.abs(minY * zoom + viewport.offsetHeight)
+
+  if (newXPos > MAX_X) newXPos = MAX_X
+  else if (newXPos < minXBoundary) newXPos = minXBoundary
+
+  if (newYPos > MAX_Y) {
+    newYPos = MAX_Y
+  } else if (newYPos < minYBoundary) {
+    newYPos = minYBoundary
+  }
+
+  return {
+    ...action,
+    payload: {
+      x: newXPos,
+      y: newYPos,
+    },
+  }
+}
+
 /** enrich viewport actions
  * @param store
  */
@@ -121,6 +166,10 @@ const viewportMiddleware = (store: any) => (next: any) => (action: any) => {
     const { isPanning } = storeState.viewport;
     if (!isPanning) return;
     return next(transformPanAction(storeState, action));
+  }
+
+  if (action.type === SET_VIEWPORT_POS_DELTA) {
+    return next(transformPanDeltaAction(storeState, action))
   }
 
   return next(action);

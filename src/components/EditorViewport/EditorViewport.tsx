@@ -38,9 +38,6 @@ function EditorViewport(props: any) {
   // zoom functionality
   useZoomingAndPanning(canZoom, canPan, viewport);
 
-  // // pan functionality
-  // usePanning(canPan, viewport);
-
   // key binds
   useKeyEvents(viewport);
 
