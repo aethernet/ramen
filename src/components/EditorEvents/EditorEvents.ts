@@ -57,6 +57,7 @@ function EditorEvents(): null {
         e.stopPropagation();
         e.preventDefault();
         dispatch(setPendingConnectionOrigin(null));
+        return
       }
       
       const target = targetDomElm as HTMLInputElement;
