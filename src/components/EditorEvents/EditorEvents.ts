@@ -51,7 +51,15 @@ function EditorEvents(): null {
      * @param e
      */
     function onPointerUp(e: MouseEvent) {
-      const target = e.target as HTMLInputElement;
+      //This hack fix the connection issue on mobile safari. Without it touch patching is not possible (event.target = pointerdown target instead of pointerup, unknwn reason, no time to investigate further)
+      const targetDomElm = document.querySelector("div[data-type=FIELD][data-isInput=true]:hover")
+      if (!targetDomElm) {
+        e.stopPropagation();
+        e.preventDefault();
+        dispatch(setPendingConnectionOrigin(null));
+      }
+      
+      const target = targetDomElm as HTMLInputElement;
       const fieldId = target.dataset.fieldid;
       const isInput = target.dataset.isinput;
       const nodeId = target.dataset.nodeid;
