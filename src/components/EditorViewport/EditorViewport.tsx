@@ -5,9 +5,9 @@ import { getViewportId } from "../../redux/references/references.selectors";
 import { getViewport } from "../../redux/viewport/viewport.selectors";
 import { EditorWrapperBackground, Viewport } from "./EditorViewport.styles";
 import useKeyEvents from "./hooks/useKeyEvents";
-import usePanning from "./hooks/usePanning";
+//import usePanning from "./hooks/usePanning";
 import useSelection from "./hooks/useSelection";
-import useZooming from "./hooks/useZooming";
+import useZoomingAndPanning from "./hooks/useZoomingAndPanning";
 
 function EditorWrapper(props: any) {
   const { xPos, yPos, zoom } = useSelector(getViewport, shallowEqual);
@@ -36,10 +36,10 @@ function EditorViewport(props: any) {
   }, [viewportRef]);
 
   // zoom functionality
-  useZooming(canZoom, viewport);
+  useZoomingAndPanning(canZoom, canPan, viewport);
 
-  // pan functionality
-  usePanning(canPan, viewport);
+  // // pan functionality
+  // usePanning(canPan, viewport);
 
   // key binds
   useKeyEvents(viewport);

@@ -116,10 +116,13 @@
   },
   "dependencies": {
     "@simonwep/selection-js": "^1.6.0",
+    "@types/react-hammerjs": "^1.0.1",
+    "hammerjs": "^2.0.8",
     "immer": "^5.3.6",
     "lodash.get": "^4.4.2",
     "lodash.isequal": "^4.5.0",
     "react-draggable": "^4.3.0",
+    "react-hammerjs": "^1.0.1",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-undo": "^1.0.1",
