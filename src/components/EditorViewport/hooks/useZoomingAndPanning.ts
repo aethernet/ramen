@@ -37,13 +37,13 @@ function useZoomingAndPanning(canZoom: boolean, canPan: boolean, viewport: any):
       }
     }
 
-    function onPinch(e: TouchEvent) {
+    function onPinch(e: TouchEvent & { zoom: number, pageX: number, pageY: number }) {
       const zoom = 1-e.zoom
       if(zoom < -0.5 || zoom > 0.5) //prevent accidental zoom when drag
         dispatch(setViewportZoom(zoom*3, e.pageX, e.pageY))
     }
 
-    function ontwoFingerPressMove(e: TouchEvent) {
+    function ontwoFingerPressMove(e: TouchEvent & { deltaX: number, deltaY: number }) {
       dispatch(setViewportPosDelta(-e.deltaX, -e.deltaY))
     }
 
